@@ -3,10 +3,16 @@ package com.joeworld.controller;
 import com.github.pagehelper.PageHelper;
 import com.joeworld.common.PageInfo;
 import com.joeworld.common.R;
+import com.joeworld.enums.YesOrNo;
 import com.joeworld.pojo.ItemsComments;
+import com.joeworld.pojo.OrderStatus;
+import com.joeworld.pojo.Orders;
+import com.joeworld.pojo.bo.center.OrderItmesCommentBo;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
 import com.joeworld.pojo.vo.SearchItemsVo;
 import com.joeworld.service.ItemsCommentsService;
+import com.joeworld.service.OrderStatusService;
+import com.joeworld.service.OrdersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.ClassInfo;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +36,8 @@ public class ItemsCommentsController {
 
     @Autowired
     private ItemsCommentsService itemsCommentsService;
-    
+    @Autowired
+    private OrdersService ordersService;
     /**
      * 分页查询
      * @param params
@@ -204,5 +212,48 @@ public class ItemsCommentsController {
 
         return R.ok(itemsCommentsService.selectItemBySpecIds(itemSpecIds));
     }
+
+    /**
+     * 保存商品评价
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    @ApiOperation(value = "保存商品评价")
+    @PostMapping("/saveComments")
+    public R saveComments(@RequestParam String userId,
+                  @RequestParam String orderId,
+                  @RequestBody List<OrderItmesCommentBo> commentList) {
+
+        Orders orders = ordersService.selectMyOrderOne(userId, orderId);
+        if (orders == null) {
+            return R.error("订单存在");
+        }
+        if (null == commentList || commentList.size() == 0) {
+            return R.error("评论内容不能为空");
+        }
+        itemsCommentsService.saveComments(userId,orderId,commentList);
+        return R.ok();
+    }
+
+    /**
+     * 评价管理（查询全部评价 分页）
+     * @param userId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "评价管理（查询全部评价 分页）")
+    @PostMapping("/selectComments")
+    public R selectComments(@RequestParam String userId, @RequestParam  Integer page,@RequestParam Integer pageSize) {
+        if (null == page){
+            page = 0;
+        }
+        if (null == pageSize){
+            pageSize = 10;
+        }
+        return R.ok(itemsCommentsService.selectComments(userId, page, pageSize));
+    }
+
 
 }

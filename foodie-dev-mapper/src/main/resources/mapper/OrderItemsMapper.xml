@@ -71,7 +71,7 @@
         FROM order_items 
         <where>
 
-               <if test="null != orderId and null != orderId.value and '' != orderId.value">
+               <if test="null != orderId">
                   and  order_id=#{orderId}
               </if>
                <if test="null != itemId and null != itemId.value and '' != itemId.value">

@@ -2,8 +2,11 @@ package com.joeworld.controller;
 
 import com.joeworld.common.PageInfo;
 import com.joeworld.common.R;
+import com.joeworld.enums.YesOrNo;
 import com.joeworld.pojo.OrderItems;
+import com.joeworld.pojo.Orders;
 import com.joeworld.service.OrderItemsService;
+import com.joeworld.service.OrdersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -24,7 +27,8 @@ public class OrderItemsController {
 
     @Autowired
     private OrderItemsService orderItemsService;
-    
+    @Autowired
+    private OrdersService ordersService;
     /**
      * 分页查询
      * @param params
@@ -118,4 +122,31 @@ public class OrderItemsController {
           }
           return R.error("删除失败");
       }
+
+    /**
+     * 根据用户id 查询评价列表（lsit）
+     * @param orderId
+     * @return
+     */
+    @ApiOperation(value = "根据用户id 查询评价列表（lsit）")
+    @RequestMapping("/selectListByOrderId")
+    @ResponseBody
+    public R selectListByOrderId(@RequestParam String orderId,@RequestParam String userId) {
+        /**
+         * 确认订单和用户同一个
+         */
+        Orders orders = ordersService.selectMyOrderOne(userId, orderId);
+        if (orders == null) {
+            return R.error("订单存在");
+        }
+        if (null!=orders.getIsComment() && YesOrNo.yes.type == orders.getIsComment()){
+            return R.error("该订单已经评价过！请刷新后重试！");
+        }
+        List<OrderItems> OrderItems =  orderItemsService.selectListByOrderId(orderId);
+        return  R.ok(OrderItems);
+    }
+
+
+
+
 }

@@ -8,7 +8,10 @@ import com.joeworld.service.OrderItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.ClassInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,5 +110,11 @@ public class OrderItemsServiceImpl implements OrderItemsService {
     public int delete(OrderItems orderItems) {
     	return orderItemsMapper.delete(orderItems);
     }
-	
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<OrderItems> selectListByOrderId(String orderId) {
+        HashMap hashMap = new HashMap();
+        hashMap.put("orderId",orderId);
+        return orderItemsMapper.listAll(hashMap);
+    }
 }

@@ -71,5 +71,6 @@ public interface OrderItemsService {
      * @return 返回影响行数
      */
 	int delete(OrderItems orderItems);
-	
+
+	List<OrderItems> selectListByOrderId(String orderId);
 }

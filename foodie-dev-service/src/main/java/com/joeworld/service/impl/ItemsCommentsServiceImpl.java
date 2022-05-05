@@ -3,13 +3,20 @@ package com.joeworld.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.joeworld.common.PageInfo;
 import com.joeworld.enums.CommentLevel;
+import com.joeworld.enums.YesOrNo;
 import com.joeworld.mapper.ItemsCommentsMapper;
 import com.joeworld.pojo.ItemsComments;
+import com.joeworld.pojo.OrderStatus;
+import com.joeworld.pojo.Orders;
+import com.joeworld.pojo.bo.center.OrderItmesCommentBo;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
 import com.joeworld.pojo.vo.ItmeCommentVo;
 import com.joeworld.pojo.vo.SearchItemsVo;
 import com.joeworld.pojo.vo.ShopcartVo;
 import com.joeworld.service.ItemsCommentsService;
+import com.joeworld.service.OrderStatusService;
+import com.joeworld.service.OrdersService;
+import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.ClassInfo;
 import org.springframework.stereotype.Service;
@@ -23,7 +30,12 @@ public class ItemsCommentsServiceImpl implements ItemsCommentsService {
 
     @Autowired
     private ItemsCommentsMapper itemsCommentsMapper;
-    
+    @Autowired
+    private Sid sid;
+    @Autowired
+    private OrdersService ordersService;
+    @Autowired
+    private OrderStatusService orderStatusService;
     /**
     * 分页查询所有记录
     * @param map
@@ -177,5 +189,38 @@ public class ItemsCommentsServiceImpl implements ItemsCommentsService {
         Collections.addAll(speclasList,ids); //对象拷贝
         return itemsCommentsMapper.selectItemBySpecIds(speclasList);
     }
-    //food-1002-spec-1
+
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void saveComments(String userId, String orderId, List<OrderItmesCommentBo> commentList) {
+
+        commentList.forEach(orderItmesCommentBo -> {
+           orderItmesCommentBo.setCommentId(sid.nextShort());
+        });
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("commentList",commentList);
+        // 批量新增商品评价
+        itemsCommentsMapper.saveComments(map);
+        Orders order = new Orders();
+        order.setId(orderId);
+        order.setIsComment(YesOrNo.yes.type);
+        // 修改顶戴是否品佳状态
+        ordersService.updateIgnoreNull(order);
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus.setCommentTime(new Date());
+        //修改状态表 评价时间
+        orderStatusService.updateIgnoreNull(orderStatus);
+    }
+    @Override
+    public PageInfo<ClassInfo> selectComments(String userId,Integer page,Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userId",userId);
+        List<ClassInfo> lsit = itemsCommentsMapper.selectComments(map);
+        return new PageInfo<>(lsit);
+    }
 }

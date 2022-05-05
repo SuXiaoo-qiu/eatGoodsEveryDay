@@ -1,14 +1,14 @@
 package com.joeworld.service;
 
 
+
+
 import com.joeworld.common.PageInfo;
 import com.joeworld.pojo.ItemsComments;
+import com.joeworld.pojo.bo.center.OrderItmesCommentBo;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
-import com.joeworld.pojo.vo.ItmeCommentVo;
-import com.joeworld.pojo.vo.SearchItemsVo;
 import com.joeworld.pojo.vo.ShopcartVo;
 import org.springframework.cglib.core.ClassInfo;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -104,4 +104,15 @@ public interface ItemsCommentsService {
 	public PageInfo<ClassInfo> searchItemsByThirdCat( String catId,String sort,Integer page,Integer pageSize);
 
 	public List<ShopcartVo> selectItemBySpecIds(String specIds);
+
+	/**
+	 * 保存品论
+	 * @param userId
+	 * @param orderId
+	 * @param commentList
+	 */
+	void saveComments(String userId, String orderId,List<OrderItmesCommentBo> commentList);
+
+	PageInfo<ClassInfo>  selectComments(String userId,Integer page,Integer pageSize);
+
 }

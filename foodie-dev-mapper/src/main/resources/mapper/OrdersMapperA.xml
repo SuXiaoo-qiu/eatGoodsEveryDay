@@ -67,7 +67,20 @@
 
     <select id="selectMyOrderOne" resultType="com.joeworld.pojo.Orders" parameterType="com.joeworld.pojo.Orders">
         SELECT
-        *
+            user_id AS userId,
+            receiver_name AS receiverName,
+            receiver_mobile AS receiverMobile,
+            receiver_address AS receiverAddress,
+            total_amount AS totalAmount,
+            real_pay_amount AS realPayAmount,
+            post_amount AS postAmount,
+            pay_method AS payMethod,
+            left_msg AS leftMsg,
+            extand AS extand,
+            is_comment AS isComment,
+            is_delete AS isDelete,
+            created_time AS createdTime,
+            updated_time AS updatedTime
         FROM
         `orders`
         <where>

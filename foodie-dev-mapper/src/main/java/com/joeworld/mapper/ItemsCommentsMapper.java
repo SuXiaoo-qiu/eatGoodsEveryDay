@@ -1,10 +1,7 @@
 package com.joeworld.mapper;
 
-import com.joeworld.common.PageInfo;
 import com.joeworld.pojo.ItemsComments;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
-import com.joeworld.pojo.vo.ItmeCommentVo;
-import com.joeworld.pojo.vo.SearchItemsVo;
 import com.joeworld.pojo.vo.ShopcartVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -114,5 +111,12 @@ public interface ItemsCommentsMapper {
 	 * @return
 	 */
 	public List<ShopcartVo>  selectItemBySpecIds(@Param("paramsList")List specIdsList);
+
+
+	void saveComments(Map<String,Object> map);
+
+
+	public List<ClassInfo>  selectComments(@Param("paramsMap")Map map);
+
 
 }
