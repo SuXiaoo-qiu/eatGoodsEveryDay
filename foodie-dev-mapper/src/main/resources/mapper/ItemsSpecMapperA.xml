@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsSpecMapper">
+
+    <select id="getItemsId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumns" />
+        FROM items_spec
+        <where>
+            and  item_id=#{itemId}
+        </where>
+    </select>
+    <update id="decreaseItemSpecStock">
+        UPDATE items_spec
+        SET stock = stock - #{pendingCounts}
+        WHERE
+            id = #{specId}
+          AND stock >= #{pendingCounts}
+    </update>
+</mapper>

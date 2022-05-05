@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsCommentsMapper">
+
+    <select id="selectCommentCounts" resultType="com.joeworld.pojo.vo.CommentLeveCountsVo" parameterType="map">
+        SELECT COUNT(*) as publicCounts  FROM  items_comments
+        <where>
+            and  item_id=#{itemId}  and  comment_level=#{commentLevel}
+        </where>
+    </select>
+
+
+
+    <select id="selectItmeComments" resultType="com.joeworld.pojo.vo.ItmeCommentVo" parameterType="map">
+        SELECT
+        ic.`sepc_name` as sepcName,
+        ic.`comment_level` AS commentLevel,
+        ic.created_time as createdTime,
+        ic.`content` AS content,
+        u.`nickname` AS nickname,
+        u.`face` AS userFace
+        FROM
+        items_comments ic
+        LEFT JOIN users u ON ic.user_id = u.id
+        where  item_id =#{paramsMap.itemId}
+        <if test=" paramsMap.commentLevel != null and paramsMap.commentLevel != '' ">
+            and     ic.`comment_level`=#{paramsMap.commentLevel}
+        </if>
+    </select>
+
+
+    <select id="searchItems" resultType="com.joeworld.pojo.vo.SearchItemsVo" parameterType="map">
+        SELECT
+        i.id AS itemId,
+        i.sell_counts AS sellCounts,
+        i.item_name AS itemName,
+        ii.url AS imgUrl,
+        itemSoec.priceDiscount AS price
+        FROM
+        `items` i
+        LEFT JOIN items_img ii ON i.id = ii.item_id
+        LEFT JOIN ( SELECT item_id AS itemId, MIN( price_discount ) AS priceDiscount FROM items_spec GROUP BY item_id ) itemSoec ON i.id = itemSoec.itemId
+        WHERE
+        is_main = 1
+        AND i.on_off_status = 1
+        <if test=" paramsMap.keywords != null and paramsMap.keywords != '' ">
+            and i.item_name like concat('%',#{paramsMap.keywords},'%')
+        </if>
+        order by
+        <choose>
+            <when test="paramsMap.sort == &quot;c&quot;">
+                i.sell_counts desc
+            </when>
+            <when test="paramsMap.sort == &quot;p&quot;">
+                itemSoec.priceDiscount desc
+            </when>
+            <otherwise>
+                i.item_name asc
+            </otherwise>
+        </choose>
+    </select>
+    <select id="searchItemsByThirdCat" resultType="com.joeworld.pojo.vo.SearchItemsVo" parameterType="map">
+        SELECT
+        i.id AS itemId,
+        i.sell_counts AS sellCounts,
+        i.item_name AS itemName,
+        ii.url AS imgUrl,
+        itemSoec.priceDiscount AS price
+        FROM
+        `items` i
+        LEFT JOIN items_img ii ON i.id = ii.item_id
+        LEFT JOIN ( SELECT item_id AS itemId, MIN( price_discount ) AS priceDiscount FROM items_spec GROUP BY item_id ) itemSoec ON i.id = itemSoec.itemId
+        WHERE
+        is_main = 1
+        AND i.on_off_status = 1
+        and i.cat_id = #{paramsMap.catId}
+
+        order by
+        <choose>
+            <when test="paramsMap.sort == &quot;c&quot;">
+                i.sell_counts desc
+            </when>
+            <when test="paramsMap.sort == &quot;p&quot;">
+                itemSoec.priceDiscount desc
+            </when>
+            <otherwise>
+                i.item_name asc
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="selectItemBySpecIds" resultType="com.joeworld.pojo.vo.ShopcartVo" parameterType="List">
+        SELECT
+            items.id AS itemId,
+            items.item_name AS itemName,
+            iimg.url AS itemImgUrl,
+            itsp.id AS specId,
+            itsp.`name` AS specName,
+            itsp.price_discount AS priceDiscount,
+            itsp.price_normal AS priceNormal
+        FROM
+            items_spec itsp
+                LEFT JOIN items items ON itsp.item_id = items.id
+                LEFT JOIN items_img iimg ON iimg.item_id = items.id
+        WHERE
+            iimg.is_main = 1
+          AND itsp.id IN
+        <foreach collection="paramsList" index="index" item="specIdsList" open="(" separator="," close=")">
+            #{specIdsList}
+        </foreach>
+    </select>
+
+</mapper>

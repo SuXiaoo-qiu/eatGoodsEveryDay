@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.TUserMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.TUser">
+        <result column="id" property="id" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , created_by
+        , created_time
+        , updated_by
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM t_user 
+        <where>
+  
+               <if test="null != createdBy and null != createdBy.value and '' != createdBy.value">
+                    and  created_by=#{createdBy}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedBy and null != updatedBy.value and '' != updatedBy.value">
+                    and  updated_by=#{updatedBy}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM t_user 
+        <where>
+
+               <if test="null != createdBy and null != createdBy.value and '' != createdBy.value">
+                  and  created_by=#{createdBy}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedBy and null != updatedBy.value and '' != updatedBy.value">
+                  and  updated_by=#{updatedBy}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="Integer">
+        SELECT <include refid="baseColumns" /> FROM t_user t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.TUser"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                          created_by,
+                 created_time,
+                 updated_by,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            #{createdBy},                   
+           #{createdTime},                   
+           #{updatedBy},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.TUser"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO t_user    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                        <if test="null != createdBy and  ''!= createdBy">
+                         created_by,
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedBy and  ''!= updatedBy">
+                         updated_by,
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+                        <if test="null != createdBy and  ''!= createdBy">
+                  		#{createdBy},                    
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedBy and  ''!= updatedBy">
+                  		#{updatedBy},                    
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.TUser">
+        UPDATE t_user
+        <set>		
+        	created_by=#{createdBy},        
+        	created_time=#{createdTime},        
+        	updated_by=#{updatedBy},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.TUser">
+        UPDATE t_user
+        <set>
+                <if test="null != createdBy  and  ''!= createdBy">
+                       created_by=#{createdBy},                 
+                </if>
+                <if test="null != createdTime  and  ''!= createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedBy  and  ''!= updatedBy">
+                       updated_by=#{updatedBy},                 
+                </if>
+                <if test="null != updatedTime  and  ''!= updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.TUser">
+    DELETE FROM  t_user   WHERE id = #{id}
+    </delete>
+
+</mapper>

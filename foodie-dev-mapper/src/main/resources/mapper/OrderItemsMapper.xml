@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.OrderItemsMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.OrderItems">
+        <result column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="item_id" property="itemId" />
+        <result column="item_img" property="itemImg" />
+        <result column="item_name" property="itemName" />
+        <result column="item_spec_id" property="itemSpecId" />
+        <result column="item_spec_name" property="itemSpecName" />
+        <result column="price" property="price" />
+        <result column="buy_counts" property="buyCounts" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , order_id
+        , item_id
+        , item_img
+        , item_name
+        , item_spec_id
+        , item_spec_name
+        , price
+        , buy_counts
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM order_items 
+        <where>
+  
+               <if test="null != orderId and null != orderId.value and '' != orderId.value">
+                    and  order_id=#{orderId}
+               </if>
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                    and  item_id=#{itemId}
+               </if>
+               <if test="null != itemImg and null != itemImg.value and '' != itemImg.value">
+                    and  item_img=#{itemImg}
+               </if>
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                    and  item_name=#{itemName}
+               </if>
+               <if test="null != itemSpecId and null != itemSpecId.value and '' != itemSpecId.value">
+                    and  item_spec_id=#{itemSpecId}
+               </if>
+               <if test="null != itemSpecName and null != itemSpecName.value and '' != itemSpecName.value">
+                    and  item_spec_name=#{itemSpecName}
+               </if>
+               <if test="null != price and null != price.value and '' != price.value">
+                    and  price=#{price}
+               </if>
+               <if test="null != buyCounts and null != buyCounts.value and '' != buyCounts.value">
+                    and  buy_counts=#{buyCounts}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM order_items 
+        <where>
+
+               <if test="null != orderId and null != orderId.value and '' != orderId.value">
+                  and  order_id=#{orderId}
+              </if>
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                  and  item_id=#{itemId}
+              </if>
+               <if test="null != itemImg and null != itemImg.value and '' != itemImg.value">
+                  and  item_img=#{itemImg}
+              </if>
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                  and  item_name=#{itemName}
+              </if>
+               <if test="null != itemSpecId and null != itemSpecId.value and '' != itemSpecId.value">
+                  and  item_spec_id=#{itemSpecId}
+              </if>
+               <if test="null != itemSpecName and null != itemSpecName.value and '' != itemSpecName.value">
+                  and  item_spec_name=#{itemSpecName}
+              </if>
+               <if test="null != price and null != price.value and '' != price.value">
+                  and  price=#{price}
+              </if>
+               <if test="null != buyCounts and null != buyCounts.value and '' != buyCounts.value">
+                  and  buy_counts=#{buyCounts}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM order_items t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.OrderItems"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO order_items
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 order_id,
+                 item_id,
+                 item_img,
+                 item_name,
+                 item_spec_id,
+                 item_spec_name,
+                 price,
+                 buy_counts,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{orderId},                   
+           #{itemId},                   
+           #{itemImg},                   
+           #{itemName},                   
+           #{itemSpecId},                   
+           #{itemSpecName},                   
+           #{price},                   
+           #{buyCounts},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.OrderItems"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO order_items    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != orderId and  ''!= orderId">
+                         order_id,
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                         item_id,
+                  </if>
+                  <if test="null != itemImg and  ''!= itemImg">
+                         item_img,
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                         item_name,
+                  </if>
+                  <if test="null != itemSpecId and  ''!= itemSpecId">
+                         item_spec_id,
+                  </if>
+                  <if test="null != itemSpecName and  ''!= itemSpecName">
+                         item_spec_name,
+                  </if>
+                  <if test="null != price and  ''!= price">
+                         price,
+                  </if>
+                  <if test="null != buyCounts and  ''!= buyCounts">
+                         buy_counts,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != orderId and  ''!= orderId">
+                  		#{orderId},                    
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                  		#{itemId},                    
+                  </if>
+                  <if test="null != itemImg and  ''!= itemImg">
+                  		#{itemImg},                    
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                  		#{itemName},                    
+                  </if>
+                  <if test="null != itemSpecId and  ''!= itemSpecId">
+                  		#{itemSpecId},                    
+                  </if>
+                  <if test="null != itemSpecName and  ''!= itemSpecName">
+                  		#{itemSpecName},                    
+                  </if>
+                  <if test="null != price and  ''!= price">
+                  		#{price},                    
+                  </if>
+                  <if test="null != buyCounts and  ''!= buyCounts">
+                  		#{buyCounts},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.OrderItems">
+        UPDATE order_items
+        <set>		
+        	order_id=#{orderId},        
+        	item_id=#{itemId},        
+        	item_img=#{itemImg},        
+        	item_name=#{itemName},        
+        	item_spec_id=#{itemSpecId},        
+        	item_spec_name=#{itemSpecName},        
+        	price=#{price},        
+        	buy_counts=#{buyCounts},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.OrderItems">
+        UPDATE order_items
+        <set>
+                <if test="null != orderId  and  ''!= orderId">
+                       order_id=#{orderId},                 
+                </if>
+                <if test="null != itemId  and  ''!= itemId">
+                       item_id=#{itemId},                 
+                </if>
+                <if test="null != itemImg  and  ''!= itemImg">
+                       item_img=#{itemImg},                 
+                </if>
+                <if test="null != itemName  and  ''!= itemName">
+                       item_name=#{itemName},                 
+                </if>
+                <if test="null != itemSpecId  and  ''!= itemSpecId">
+                       item_spec_id=#{itemSpecId},                 
+                </if>
+                <if test="null != itemSpecName  and  ''!= itemSpecName">
+                       item_spec_name=#{itemSpecName},                 
+                </if>
+                <if test="null != price  and  ''!= price">
+                       price=#{price},                 
+                </if>
+                <if test="null != buyCounts  and  ''!= buyCounts">
+                       buy_counts=#{buyCounts},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.OrderItems">
+    DELETE FROM  order_items   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

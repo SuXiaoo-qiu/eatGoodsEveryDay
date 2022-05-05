@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.TUserMapper">
+
+<!-- 根据用户名查询数据 -->
+    <select id="selectUserNameIsExist" resultType="boolean" parameterType="string">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM t_user 
+        <where>
+            updated_time=#{updatedTime},
+
+        </where>
+        		order by id desc
+    </select>
+
+
+</mapper>

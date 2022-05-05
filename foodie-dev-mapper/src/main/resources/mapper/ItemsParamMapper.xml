@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsParamMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.ItemsParam">
+        <result column="id" property="id" />
+        <result column="item_id" property="itemId" />
+        <result column="produc_place" property="producPlace" />
+        <result column="foot_period" property="footPeriod" />
+        <result column="brand" property="brand" />
+        <result column="factory_name" property="factoryName" />
+        <result column="factory_address" property="factoryAddress" />
+        <result column="packaging_method" property="packagingMethod" />
+        <result column="weight" property="weight" />
+        <result column="storage_method" property="storageMethod" />
+        <result column="eat_method" property="eatMethod" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , item_id
+        , produc_place
+        , foot_period
+        , brand
+        , factory_name
+        , factory_address
+        , packaging_method
+        , weight
+        , storage_method
+        , eat_method
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_param 
+        <where>
+  
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                    and  item_id=#{itemId}
+               </if>
+               <if test="null != producPlace and null != producPlace.value and '' != producPlace.value">
+                    and  produc_place=#{producPlace}
+               </if>
+               <if test="null != footPeriod and null != footPeriod.value and '' != footPeriod.value">
+                    and  foot_period=#{footPeriod}
+               </if>
+               <if test="null != brand and null != brand.value and '' != brand.value">
+                    and  brand=#{brand}
+               </if>
+               <if test="null != factoryName and null != factoryName.value and '' != factoryName.value">
+                    and  factory_name=#{factoryName}
+               </if>
+               <if test="null != factoryAddress and null != factoryAddress.value and '' != factoryAddress.value">
+                    and  factory_address=#{factoryAddress}
+               </if>
+               <if test="null != packagingMethod and null != packagingMethod.value and '' != packagingMethod.value">
+                    and  packaging_method=#{packagingMethod}
+               </if>
+               <if test="null != weight and null != weight.value and '' != weight.value">
+                    and  weight=#{weight}
+               </if>
+               <if test="null != storageMethod and null != storageMethod.value and '' != storageMethod.value">
+                    and  storage_method=#{storageMethod}
+               </if>
+               <if test="null != eatMethod and null != eatMethod.value and '' != eatMethod.value">
+                    and  eat_method=#{eatMethod}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_param 
+        <where>
+
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                  and  item_id=#{itemId}
+              </if>
+               <if test="null != producPlace and null != producPlace.value and '' != producPlace.value">
+                  and  produc_place=#{producPlace}
+              </if>
+               <if test="null != footPeriod and null != footPeriod.value and '' != footPeriod.value">
+                  and  foot_period=#{footPeriod}
+              </if>
+               <if test="null != brand and null != brand.value and '' != brand.value">
+                  and  brand=#{brand}
+              </if>
+               <if test="null != factoryName and null != factoryName.value and '' != factoryName.value">
+                  and  factory_name=#{factoryName}
+              </if>
+               <if test="null != factoryAddress and null != factoryAddress.value and '' != factoryAddress.value">
+                  and  factory_address=#{factoryAddress}
+              </if>
+               <if test="null != packagingMethod and null != packagingMethod.value and '' != packagingMethod.value">
+                  and  packaging_method=#{packagingMethod}
+              </if>
+               <if test="null != weight and null != weight.value and '' != weight.value">
+                  and  weight=#{weight}
+              </if>
+               <if test="null != storageMethod and null != storageMethod.value and '' != storageMethod.value">
+                  and  storage_method=#{storageMethod}
+              </if>
+               <if test="null != eatMethod and null != eatMethod.value and '' != eatMethod.value">
+                  and  eat_method=#{eatMethod}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM items_param t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.ItemsParam"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO items_param
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 item_id,
+                 produc_place,
+                 foot_period,
+                 brand,
+                 factory_name,
+                 factory_address,
+                 packaging_method,
+                 weight,
+                 storage_method,
+                 eat_method,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{itemId},                   
+           #{producPlace},                   
+           #{footPeriod},                   
+           #{brand},                   
+           #{factoryName},                   
+           #{factoryAddress},                   
+           #{packagingMethod},                   
+           #{weight},                   
+           #{storageMethod},                   
+           #{eatMethod},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.ItemsParam"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO items_param    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                         item_id,
+                  </if>
+                  <if test="null != producPlace and  ''!= producPlace">
+                         produc_place,
+                  </if>
+                  <if test="null != footPeriod and  ''!= footPeriod">
+                         foot_period,
+                  </if>
+                  <if test="null != brand and  ''!= brand">
+                         brand,
+                  </if>
+                  <if test="null != factoryName and  ''!= factoryName">
+                         factory_name,
+                  </if>
+                  <if test="null != factoryAddress and  ''!= factoryAddress">
+                         factory_address,
+                  </if>
+                  <if test="null != packagingMethod and  ''!= packagingMethod">
+                         packaging_method,
+                  </if>
+                  <if test="null != weight and  ''!= weight">
+                         weight,
+                  </if>
+                  <if test="null != storageMethod and  ''!= storageMethod">
+                         storage_method,
+                  </if>
+                  <if test="null != eatMethod and  ''!= eatMethod">
+                         eat_method,
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                  		#{itemId},                    
+                  </if>
+                  <if test="null != producPlace and  ''!= producPlace">
+                  		#{producPlace},                    
+                  </if>
+                  <if test="null != footPeriod and  ''!= footPeriod">
+                  		#{footPeriod},                    
+                  </if>
+                  <if test="null != brand and  ''!= brand">
+                  		#{brand},                    
+                  </if>
+                  <if test="null != factoryName and  ''!= factoryName">
+                  		#{factoryName},                    
+                  </if>
+                  <if test="null != factoryAddress and  ''!= factoryAddress">
+                  		#{factoryAddress},                    
+                  </if>
+                  <if test="null != packagingMethod and  ''!= packagingMethod">
+                  		#{packagingMethod},                    
+                  </if>
+                  <if test="null != weight and  ''!= weight">
+                  		#{weight},                    
+                  </if>
+                  <if test="null != storageMethod and  ''!= storageMethod">
+                  		#{storageMethod},                    
+                  </if>
+                  <if test="null != eatMethod and  ''!= eatMethod">
+                  		#{eatMethod},                    
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.ItemsParam">
+        UPDATE items_param
+        <set>		
+        	item_id=#{itemId},        
+        	produc_place=#{producPlace},        
+        	foot_period=#{footPeriod},        
+        	brand=#{brand},        
+        	factory_name=#{factoryName},        
+        	factory_address=#{factoryAddress},        
+        	packaging_method=#{packagingMethod},        
+        	weight=#{weight},        
+        	storage_method=#{storageMethod},        
+        	eat_method=#{eatMethod},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.ItemsParam">
+        UPDATE items_param
+        <set>
+                <if test="null != itemId  and  ''!= itemId">
+                       item_id=#{itemId},                 
+                </if>
+                <if test="null != producPlace  and  ''!= producPlace">
+                       produc_place=#{producPlace},                 
+                </if>
+                <if test="null != footPeriod  and  ''!= footPeriod">
+                       foot_period=#{footPeriod},                 
+                </if>
+                <if test="null != brand  and  ''!= brand">
+                       brand=#{brand},                 
+                </if>
+                <if test="null != factoryName  and  ''!= factoryName">
+                       factory_name=#{factoryName},                 
+                </if>
+                <if test="null != factoryAddress  and  ''!= factoryAddress">
+                       factory_address=#{factoryAddress},                 
+                </if>
+                <if test="null != packagingMethod  and  ''!= packagingMethod">
+                       packaging_method=#{packagingMethod},                 
+                </if>
+                <if test="null != weight  and  ''!= weight">
+                       weight=#{weight},                 
+                </if>
+                <if test="null != storageMethod  and  ''!= storageMethod">
+                       storage_method=#{storageMethod},                 
+                </if>
+                <if test="null != eatMethod  and  ''!= eatMethod">
+                       eat_method=#{eatMethod},                 
+                </if>
+                <if test="null != createdTime  and  ''!= createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime  and  ''!= updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.ItemsParam">
+    DELETE FROM  items_param   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

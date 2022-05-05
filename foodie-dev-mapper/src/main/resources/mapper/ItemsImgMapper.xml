@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsImgMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.ItemsImg">
+        <result column="id" property="id" />
+        <result column="item_id" property="itemId" />
+        <result column="url" property="url" />
+        <result column="sort" property="sort" />
+        <result column="is_main" property="isMain" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , item_id
+        , url
+        , sort
+        , is_main
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_img 
+        <where>
+  
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                    and  item_id=#{itemId}
+               </if>
+               <if test="null != url and null != url.value and '' != url.value">
+                    and  url=#{url}
+               </if>
+               <if test="null != sort and null != sort.value and '' != sort.value">
+                    and  sort=#{sort}
+               </if>
+               <if test="null != isMain and null != isMain.value and '' != isMain.value">
+                    and  is_main=#{isMain}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_img 
+        <where>
+
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                  and  item_id=#{itemId}
+              </if>
+               <if test="null != url and null != url.value and '' != url.value">
+                  and  url=#{url}
+              </if>
+               <if test="null != sort and null != sort.value and '' != sort.value">
+                  and  sort=#{sort}
+              </if>
+               <if test="null != isMain and null != isMain.value and '' != isMain.value">
+                  and  is_main=#{isMain}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM items_img t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.ItemsImg"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO items_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 item_id,
+                 url,
+                 sort,
+                 is_main,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{itemId},                   
+           #{url},                   
+           #{sort},                   
+           #{isMain},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.ItemsImg"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO items_img    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                         item_id,
+                  </if>
+                  <if test="null != url and  ''!= url">
+                         url,
+                  </if>
+                  <if test="null != sort and  ''!= sort">
+                         sort,
+                  </if>
+                  <if test="null != isMain and  ''!= isMain">
+                         is_main,
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                  		#{itemId},                    
+                  </if>
+                  <if test="null != url and  ''!= url">
+                  		#{url},                    
+                  </if>
+                  <if test="null != sort and  ''!= sort">
+                  		#{sort},                    
+                  </if>
+                  <if test="null != isMain and  ''!= isMain">
+                  		#{isMain},                    
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.ItemsImg">
+        UPDATE items_img
+        <set>		
+        	item_id=#{itemId},        
+        	url=#{url},        
+        	sort=#{sort},        
+        	is_main=#{isMain},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.ItemsImg">
+        UPDATE items_img
+        <set>
+                <if test="null != itemId  and  ''!= itemId">
+                       item_id=#{itemId},                 
+                </if>
+                <if test="null != url  and  ''!= url">
+                       url=#{url},                 
+                </if>
+                <if test="null != sort  and  ''!= sort">
+                       sort=#{sort},                 
+                </if>
+                <if test="null != isMain  and  ''!= isMain">
+                       is_main=#{isMain},                 
+                </if>
+                <if test="null != createdTime  and  ''!= createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime  and  ''!= updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.ItemsImg">
+    DELETE FROM  items_img   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

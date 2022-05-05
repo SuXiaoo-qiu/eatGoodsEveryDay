@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.OrdersMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.Orders">
+        <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_mobile" property="receiverMobile" />
+        <result column="receiver_address" property="receiverAddress" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="real_pay_amount" property="realPayAmount" />
+        <result column="post_amount" property="postAmount" />
+        <result column="pay_method" property="payMethod" />
+        <result column="left_msg" property="leftMsg" />
+        <result column="extand" property="extand" />
+        <result column="is_comment" property="isComment" />
+        <result column="is_delete" property="isDelete" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , user_id
+        , receiver_name
+        , receiver_mobile
+        , receiver_address
+        , total_amount
+        , real_pay_amount
+        , post_amount
+        , pay_method
+        , left_msg
+        , extand
+        , is_comment
+        , is_delete
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM orders 
+        <where>
+  
+               <if test="null != userId and null != userId.value and '' != userId.value">
+                    and  user_id=#{userId}
+               </if>
+               <if test="null != receiverName and null != receiverName.value and '' != receiverName.value">
+                    and  receiver_name=#{receiverName}
+               </if>
+               <if test="null != receiverMobile and null != receiverMobile.value and '' != receiverMobile.value">
+                    and  receiver_mobile=#{receiverMobile}
+               </if>
+               <if test="null != receiverAddress and null != receiverAddress.value and '' != receiverAddress.value">
+                    and  receiver_address=#{receiverAddress}
+               </if>
+               <if test="null != totalAmount and null != totalAmount.value and '' != totalAmount.value">
+                    and  total_amount=#{totalAmount}
+               </if>
+               <if test="null != realPayAmount and null != realPayAmount.value and '' != realPayAmount.value">
+                    and  real_pay_amount=#{realPayAmount}
+               </if>
+               <if test="null != postAmount and null != postAmount.value and '' != postAmount.value">
+                    and  post_amount=#{postAmount}
+               </if>
+               <if test="null != payMethod and null != payMethod.value and '' != payMethod.value">
+                    and  pay_method=#{payMethod}
+               </if>
+               <if test="null != leftMsg and null != leftMsg.value and '' != leftMsg.value">
+                    and  left_msg=#{leftMsg}
+               </if>
+               <if test="null != extand and null != extand.value and '' != extand.value">
+                    and  extand=#{extand}
+               </if>
+               <if test="null != isComment and null != isComment.value and '' != isComment.value">
+                    and  is_comment=#{isComment}
+               </if>
+               <if test="null != isDelete and null != isDelete.value and '' != isDelete.value">
+                    and  is_delete=#{isDelete}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM orders 
+        <where>
+
+               <if test="null != userId and null != userId.value and '' != userId.value">
+                  and  user_id=#{userId}
+              </if>
+               <if test="null != receiverName and null != receiverName.value and '' != receiverName.value">
+                  and  receiver_name=#{receiverName}
+              </if>
+               <if test="null != receiverMobile and null != receiverMobile.value and '' != receiverMobile.value">
+                  and  receiver_mobile=#{receiverMobile}
+              </if>
+               <if test="null != receiverAddress and null != receiverAddress.value and '' != receiverAddress.value">
+                  and  receiver_address=#{receiverAddress}
+              </if>
+               <if test="null != totalAmount and null != totalAmount.value and '' != totalAmount.value">
+                  and  total_amount=#{totalAmount}
+              </if>
+               <if test="null != realPayAmount and null != realPayAmount.value and '' != realPayAmount.value">
+                  and  real_pay_amount=#{realPayAmount}
+              </if>
+               <if test="null != postAmount and null != postAmount.value and '' != postAmount.value">
+                  and  post_amount=#{postAmount}
+              </if>
+               <if test="null != payMethod and null != payMethod.value and '' != payMethod.value">
+                  and  pay_method=#{payMethod}
+              </if>
+               <if test="null != leftMsg and null != leftMsg.value and '' != leftMsg.value">
+                  and  left_msg=#{leftMsg}
+              </if>
+               <if test="null != extand and null != extand.value and '' != extand.value">
+                  and  extand=#{extand}
+              </if>
+               <if test="null != isComment and null != isComment.value and '' != isComment.value">
+                  and  is_comment=#{isComment}
+              </if>
+               <if test="null != isDelete and null != isDelete.value and '' != isDelete.value">
+                  and  is_delete=#{isDelete}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM orders t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.Orders"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 user_id,
+                 receiver_name,
+                 receiver_mobile,
+                 receiver_address,
+                 total_amount,
+                 real_pay_amount,
+                 post_amount,
+                 pay_method,
+                 left_msg,
+                 extand,
+                 is_comment,
+                 is_delete,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{userId},                   
+           #{receiverName},                   
+           #{receiverMobile},                   
+           #{receiverAddress},                   
+           #{totalAmount},                   
+           #{realPayAmount},                   
+           #{postAmount},                   
+           #{payMethod},                   
+           #{leftMsg},                   
+           #{extand},                   
+           #{isComment},                   
+           #{isDelete},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.Orders"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO orders    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != userId and  ''!= userId">
+                         user_id,
+                  </if>
+                  <if test="null != receiverName and  ''!= receiverName">
+                         receiver_name,
+                  </if>
+                  <if test="null != receiverMobile and  ''!= receiverMobile">
+                         receiver_mobile,
+                  </if>
+                  <if test="null != receiverAddress and  ''!= receiverAddress">
+                         receiver_address,
+                  </if>
+                  <if test="null != totalAmount and  ''!= totalAmount">
+                         total_amount,
+                  </if>
+                  <if test="null != realPayAmount and  ''!= realPayAmount">
+                         real_pay_amount,
+                  </if>
+                  <if test="null != postAmount">
+                         post_amount,
+                  </if>
+                  <if test="null != payMethod and  ''!= payMethod">
+                         pay_method,
+                  </if>
+                  <if test="null != leftMsg and  ''!= leftMsg">
+                         left_msg,
+                  </if>
+                  <if test="null != extand and  ''!= extand">
+                         extand,
+                  </if>
+                  <if test="null != isComment">
+                         is_comment,
+                  </if>
+                  <if test="null != isDelete">
+                         is_delete,
+                  </if>
+                  <if test="null != createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != userId and  ''!= userId">
+                  		#{userId},                    
+                  </if>
+                  <if test="null != receiverName and  ''!= receiverName">
+                  		#{receiverName},                    
+                  </if>
+                  <if test="null != receiverMobile and  ''!= receiverMobile">
+                  		#{receiverMobile},                    
+                  </if>
+                  <if test="null != receiverAddress and  ''!= receiverAddress">
+                  		#{receiverAddress},                    
+                  </if>
+                  <if test="null != totalAmount and  ''!= totalAmount">
+                  		#{totalAmount},                    
+                  </if>
+                  <if test="null != realPayAmount and  ''!= realPayAmount">
+                  		#{realPayAmount},                    
+                  </if>
+                  <if test="null != postAmount">
+                  		#{postAmount},                    
+                  </if>
+                  <if test="null != payMethod and  ''!= payMethod">
+                  		#{payMethod},                    
+                  </if>
+                  <if test="null != leftMsg and  ''!= leftMsg">
+                  		#{leftMsg},                    
+                  </if>
+                  <if test="null != extand and  ''!= extand">
+                  		#{extand},                    
+                  </if>
+                  <if test="null != isComment">
+                  		#{isComment},                    
+                  </if>
+                  <if test="null != isDelete">
+                  		#{isDelete},                    
+                  </if>
+                  <if test="null != createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.Orders">
+        UPDATE orders
+        <set>		
+        	user_id=#{userId},        
+        	receiver_name=#{receiverName},        
+        	receiver_mobile=#{receiverMobile},        
+        	receiver_address=#{receiverAddress},        
+        	total_amount=#{totalAmount},        
+        	real_pay_amount=#{realPayAmount},        
+        	post_amount=#{postAmount},        
+        	pay_method=#{payMethod},        
+        	left_msg=#{leftMsg},        
+        	extand=#{extand},        
+        	is_comment=#{isComment},        
+        	is_delete=#{isDelete},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.Orders">
+        UPDATE orders
+        <set>
+                <if test="null != userId  and  ''!= userId">
+                       user_id=#{userId},                 
+                </if>
+                <if test="null != receiverName  and  ''!= receiverName">
+                       receiver_name=#{receiverName},                 
+                </if>
+                <if test="null != receiverMobile  and  ''!= receiverMobile">
+                       receiver_mobile=#{receiverMobile},                 
+                </if>
+                <if test="null != receiverAddress  and  ''!= receiverAddress">
+                       receiver_address=#{receiverAddress},                 
+                </if>
+                <if test="null != totalAmount  and  ''!= totalAmount">
+                       total_amount=#{totalAmount},                 
+                </if>
+                <if test="null != realPayAmount  and  ''!= realPayAmount">
+                       real_pay_amount=#{realPayAmount},                 
+                </if>
+                <if test="null != postAmount  and  ''!= postAmount">
+                       post_amount=#{postAmount},                 
+                </if>
+                <if test="null != payMethod  and  ''!= payMethod">
+                       pay_method=#{payMethod},                 
+                </if>
+                <if test="null != leftMsg  and  ''!= leftMsg">
+                       left_msg=#{leftMsg},                 
+                </if>
+                <if test="null != extand  and  ''!= extand">
+                       extand=#{extand},                 
+                </if>
+                <if test="null != isComment  and  ''!= isComment">
+                       is_comment=#{isComment},                 
+                </if>
+                <if test="null != isDelete">
+                       is_delete=#{isDelete},                 
+                </if>
+                <if test="null != createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.Orders">
+    DELETE FROM  orders   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

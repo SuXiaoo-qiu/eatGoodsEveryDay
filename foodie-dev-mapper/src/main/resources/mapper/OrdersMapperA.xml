@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.OrdersMapper">
+
+
+
+    <resultMap id="myOrderVo" type="com.joeworld.pojo.vo.MyOrdersVo">
+        <id column="orderId" property="orderId"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="payMethod" property="payMethod"/>
+        <result column="realPayAmount" property="realPayAmount"/>
+        <result column="postAmount" property="postAmount"/>
+        <result column="isDelete" property="isDelete"/>
+        <result column="isComment" property="isComment"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <collection property="subOrderItemList" select="getSubItems" column="orderId" ofType="com.joeworld.pojo.vo.MySubOrderItemVo">
+            <result column="itemId" property="itemId"/>
+            <result column="itemName" property="itemName"/>
+            <result column="itemSpecId" property="itemSpecId"/>
+            <result column="itemSpecName" property="itemSpecName"/>
+            <result column="buyCounts" property="buyCounts"/>
+            <result column="price" property="price"/>
+            <result column="itemImg" property="itemImg"/>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="selectMyOrders" resultMap="myOrderVo" parameterType="Map">
+        SELECT
+        od.id as  orderId,
+        od.created_time as createdTime,
+        od.pay_method as payMethod,
+        od.real_pay_amount as realPayAmount,
+        od.post_amount as postAmount,
+        os.order_status as orderStatus,
+        od.is_delete as isDelete,
+        od.is_comment as isComment
+        FROM
+        orders od
+        LEFT JOIN order_status os ON od.id = os.order_id
+        WHERE
+        od.user_id = #{paramsMap.userId}
+        <if test="paramsMap.orderStatus!=null">
+            and  os.order_status = #{paramsMap.orderStatus}
+        </if>
+        AND od.is_delete = 0
+        ORDER BY od.created_time desc
+    </select>
+
+    <select id="getSubItems" resultType="com.joeworld.pojo.vo.MySubOrderItemVo" parameterType="String">
+       SELECT
+           oi.item_id AS itemId,
+           oi.item_name AS itemName,
+           oi.item_spec_id AS itemSpecId,
+           oi.item_spec_name AS itemSpecName,
+           oi.price AS price,
+           oi.buy_counts AS buyCounts,
+           oi.item_img AS itemImg
+       FROM
+           order_items oi
+       WHERE
+           oi.order_id =  #{orserId}
+    </select>
+
+
+
+    <select id="selectMyOrderOne" resultType="com.joeworld.pojo.Orders" parameterType="com.joeworld.pojo.Orders">
+        SELECT
+        *
+        FROM
+        `orders`
+        <where>
+            <if test="null != id  and  ''!= id">
+              and  id=#{id}
+            </if>
+            <if test="null != userId  and  ''!= userId">
+              and  user_id=#{userId}
+            </if>
+            <if test="null != isDelete">
+             and   is_delete=#{isDelete}
+            </if>
+        </where>
+        ORDER BY created_time DESC LIMIT 1
+    </select>
+
+
+
+
+
+
+    <select id="selectMyOrdersDoNotUse" resultMap="myOrderVo" parameterType="Map">
+        SELECT
+        od.id as  orderId,
+        od.created_time as createdTime,
+        od.pay_method as payMethod,
+        od.real_pay_amount as realPayAmount,
+        od.post_amount as postAmount,
+        os.order_status as orderStatus,
+        oi.item_id as itemId,
+        oi.item_name as itemName,
+        oi.item_spec_id as itemSpecId ,
+        oi.item_spec_name as itemSpecName,
+        oi.price as price ,
+        oi.buy_counts as buyCounts,
+        od.is_delete as isDelete,
+        oi.item_img as itemImg
+
+        FROM
+        orders od
+        LEFT JOIN order_status os ON od.id = os.order_id
+        LEFT JOIN order_items oi ON od.id = oi.order_id
+        WHERE
+        od.user_id = #{paramsMap.userId}
+        <if test="paramsMap.orderStatus!=null">
+            and  os.order_status = #{paramsMap.orderStatus}
+        </if>
+        AND od.is_delete = 0
+        ORDER BY od.updated_time asc
+    </select>
+
+
+</mapper>

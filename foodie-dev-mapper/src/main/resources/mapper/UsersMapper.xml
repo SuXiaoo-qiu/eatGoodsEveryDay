@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.UsersMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.Users">
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="realname" property="realname" />
+        <result column="face" property="face" />
+        <result column="mobile" property="mobile" />
+        <result column="email" property="email" />
+        <result column="sex" property="sex" />
+        <result column="birthday" property="birthday" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , username
+        , password
+        , nickname
+        , realname
+        , face
+        , mobile
+        , email
+        , sex
+        , birthday
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM users 
+        <where>
+  
+               <if test="null != username and null != username.value and '' != username.value">
+                    and  username=#{username}
+               </if>
+               <if test="null != password and null != password.value and '' != password.value">
+                    and  password=#{password}
+               </if>
+               <if test="null != nickname and null != nickname.value and '' != nickname.value">
+                    and  nickname=#{nickname}
+               </if>
+               <if test="null != realname and null != realname.value and '' != realname.value">
+                    and  realname=#{realname}
+               </if>
+               <if test="null != face and null != face.value and '' != face.value">
+                    and  face=#{face}
+               </if>
+               <if test="null != mobile and null != mobile.value and '' != mobile.value">
+                    and  mobile=#{mobile}
+               </if>
+               <if test="null != email and null != email.value and '' != email.value">
+                    and  email=#{email}
+               </if>
+               <if test="null != sex and null != sex.value and '' != sex.value">
+                    and  sex=#{sex}
+               </if>
+               <if test="null != birthday and null != birthday.value and '' != birthday.value">
+                    and  birthday=#{birthday}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM users 
+        <where>
+
+               <if test="null != username and null != username.value and '' != username.value">
+                  and  username=#{username}
+              </if>
+               <if test="null != password and null != password.value and '' != password.value">
+                  and  password=#{password}
+              </if>
+               <if test="null != nickname and null != nickname.value and '' != nickname.value">
+                  and  nickname=#{nickname}
+              </if>
+               <if test="null != realname and null != realname.value and '' != realname.value">
+                  and  realname=#{realname}
+              </if>
+               <if test="null != face and null != face.value and '' != face.value">
+                  and  face=#{face}
+              </if>
+               <if test="null != mobile and null != mobile.value and '' != mobile.value">
+                  and  mobile=#{mobile}
+              </if>
+               <if test="null != email and null != email.value and '' != email.value">
+                  and  email=#{email}
+              </if>
+               <if test="null != sex and null != sex.value and '' != sex.value">
+                  and  sex=#{sex}
+              </if>
+               <if test="null != birthday and null != birthday.value and '' != birthday.value">
+                  and  birthday=#{birthday}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM users t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.Users"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 username,
+                 password,
+                 nickname,
+                 realname,
+                 face,
+                 mobile,
+                 email,
+                 sex,
+                 birthday,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{username},                   
+           #{password},                   
+           #{nickname},                   
+           #{realname},                   
+           #{face},                   
+           #{mobile},                   
+           #{email},                   
+           #{sex},                   
+           #{birthday},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.Users"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO users    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != username and  ''!= username">
+                         username,
+                  </if>
+                  <if test="null != password and  ''!= password">
+                         password,
+                  </if>
+                  <if test="null != nickname and  ''!= nickname">
+                         nickname,
+                  </if>
+                  <if test="null != realname and  ''!= realname">
+                         realname,
+                  </if>
+                  <if test="null != face and  ''!= face">
+                         face,
+                  </if>
+                  <if test="null != mobile and  ''!= mobile">
+                         mobile,
+                  </if>
+                  <if test="null != email and  ''!= email">
+                         email,
+                  </if>
+                  <if test="null != sex and  ''!= sex">
+                         sex,
+                  </if>
+                  <if test="null != birthday">
+                         birthday,
+                  </if>
+                  <if test="null != createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != username and  ''!= username">
+                  		#{username},                    
+                  </if>
+                  <if test="null != password and  ''!= password">
+                  		#{password},                    
+                  </if>
+                  <if test="null != nickname and  ''!= nickname">
+                  		#{nickname},                    
+                  </if>
+                  <if test="null != realname and  ''!= realname">
+                  		#{realname},                    
+                  </if>
+                  <if test="null != face and  ''!= face">
+                  		#{face},                    
+                  </if>
+                  <if test="null != mobile and  ''!= mobile">
+                  		#{mobile},                    
+                  </if>
+                  <if test="null != email and  ''!= email">
+                  		#{email},                    
+                  </if>
+                  <if test="null != sex and  ''!= sex">
+                  		#{sex},                    
+                  </if>
+                  <if test="null != birthday">
+                  		#{birthday},
+                  </if>
+                  <if test="null != createdTime">
+                  		#{createdTime},
+                  </if>
+                  <if test="null != updatedTime">
+                  		#{updatedTime},
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.Users">
+        UPDATE users
+        <set>		
+        	username=#{username},        
+        	password=#{password},        
+        	nickname=#{nickname},        
+        	realname=#{realname},        
+        	face=#{face},        
+        	mobile=#{mobile},        
+        	email=#{email},        
+        	sex=#{sex},        
+        	birthday=#{birthday},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.Users">
+        UPDATE users
+        <set>
+                <if test="null != username  and  ''!= username">
+                       username=#{username},                 
+                </if>
+                <if test="null != password  and  ''!= password">
+                       password=#{password},                 
+                </if>
+                <if test="null != nickname  and  ''!= nickname">
+                       nickname=#{nickname},                 
+                </if>
+                <if test="null != realname  and  ''!= realname">
+                       realname=#{realname},                 
+                </if>
+                <if test="null != face  and  ''!= face">
+                       face=#{face},                 
+                </if>
+                <if test="null != mobile  and  ''!= mobile">
+                       mobile=#{mobile},                 
+                </if>
+                <if test="null != email  and  ''!= email">
+                       email=#{email},                 
+                </if>
+                <if test="null != sex  and  ''!= sex">
+                       sex=#{sex},                 
+                </if>
+                <if test="null != birthday">
+                       birthday=#{birthday},                 
+                </if>
+                <if test="null != createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.Users">
+    DELETE FROM  users   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

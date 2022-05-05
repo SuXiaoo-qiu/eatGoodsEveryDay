@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.Items">
+        <result column="id" property="id" />
+        <result column="item_name" property="itemName" />
+        <result column="cat_id" property="catId" />
+        <result column="root_cat_id" property="rootCatId" />
+        <result column="sell_counts" property="sellCounts" />
+        <result column="on_off_status" property="onOffStatus" />
+        <result column="content" property="content" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , item_name
+        , cat_id
+        , root_cat_id
+        , sell_counts
+        , on_off_status
+        , content
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items 
+        <where>
+  
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                    and  item_name=#{itemName}
+               </if>
+               <if test="null != catId and null != catId.value and '' != catId.value">
+                    and  cat_id=#{catId}
+               </if>
+               <if test="null != rootCatId and null != rootCatId.value and '' != rootCatId.value">
+                    and  root_cat_id=#{rootCatId}
+               </if>
+               <if test="null != sellCounts and null != sellCounts.value and '' != sellCounts.value">
+                    and  sell_counts=#{sellCounts}
+               </if>
+               <if test="null != onOffStatus and null != onOffStatus.value and '' != onOffStatus.value">
+                    and  on_off_status=#{onOffStatus}
+               </if>
+               <if test="null != content and null != content.value and '' != content.value">
+                    and  content=#{content}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items 
+        <where>
+
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                  and  item_name=#{itemName}
+              </if>
+               <if test="null != catId and null != catId.value and '' != catId.value">
+                  and  cat_id=#{catId}
+              </if>
+               <if test="null != rootCatId and null != rootCatId.value and '' != rootCatId.value">
+                  and  root_cat_id=#{rootCatId}
+              </if>
+               <if test="null != sellCounts and null != sellCounts.value and '' != sellCounts.value">
+                  and  sell_counts=#{sellCounts}
+              </if>
+               <if test="null != onOffStatus and null != onOffStatus.value and '' != onOffStatus.value">
+                  and  on_off_status=#{onOffStatus}
+              </if>
+               <if test="null != content and null != content.value and '' != content.value">
+                  and  content=#{content}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM items t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.Items"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO items
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 item_name,
+                 cat_id,
+                 root_cat_id,
+                 sell_counts,
+                 on_off_status,
+                 content,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{itemName},                   
+           #{catId},                   
+           #{rootCatId},                   
+           #{sellCounts},                   
+           #{onOffStatus},                   
+           #{content},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.Items"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO items    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                         item_name,
+                  </if>
+                  <if test="null != catId and  ''!= catId">
+                         cat_id,
+                  </if>
+                  <if test="null != rootCatId and  ''!= rootCatId">
+                         root_cat_id,
+                  </if>
+                  <if test="null != sellCounts and  ''!= sellCounts">
+                         sell_counts,
+                  </if>
+                  <if test="null != onOffStatus and  ''!= onOffStatus">
+                         on_off_status,
+                  </if>
+                  <if test="null != content and  ''!= content">
+                         content,
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                  		#{itemName},                    
+                  </if>
+                  <if test="null != catId and  ''!= catId">
+                  		#{catId},                    
+                  </if>
+                  <if test="null != rootCatId and  ''!= rootCatId">
+                  		#{rootCatId},                    
+                  </if>
+                  <if test="null != sellCounts and  ''!= sellCounts">
+                  		#{sellCounts},                    
+                  </if>
+                  <if test="null != onOffStatus and  ''!= onOffStatus">
+                  		#{onOffStatus},                    
+                  </if>
+                  <if test="null != content and  ''!= content">
+                  		#{content},                    
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.Items">
+        UPDATE items
+        <set>		
+        	item_name=#{itemName},        
+        	cat_id=#{catId},        
+        	root_cat_id=#{rootCatId},        
+        	sell_counts=#{sellCounts},        
+        	on_off_status=#{onOffStatus},        
+        	content=#{content},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.Items">
+        UPDATE items
+        <set>
+                <if test="null != itemName  and  ''!= itemName">
+                       item_name=#{itemName},                 
+                </if>
+                <if test="null != catId  and  ''!= catId">
+                       cat_id=#{catId},                 
+                </if>
+                <if test="null != rootCatId  and  ''!= rootCatId">
+                       root_cat_id=#{rootCatId},                 
+                </if>
+                <if test="null != sellCounts  and  ''!= sellCounts">
+                       sell_counts=#{sellCounts},                 
+                </if>
+                <if test="null != onOffStatus  and  ''!= onOffStatus">
+                       on_off_status=#{onOffStatus},                 
+                </if>
+                <if test="null != content  and  ''!= content">
+                       content=#{content},                 
+                </if>
+                <if test="null != createdTime  and  ''!= createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime  and  ''!= updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.Items">
+    DELETE FROM  items   WHERE id = #{id}
+
+    </delete>
+
+</mapper>

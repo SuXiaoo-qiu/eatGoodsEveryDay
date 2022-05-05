@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.CarouselMapper">
+    <select id="selectListAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumns" />
+        FROM carousel
+        <where>
+            <if test="null != imageUrl and null != imageUrl.value and '' != imageUrl.value">
+                and  image_url=#{imageUrl}
+            </if>
+            <if test="null != backgroundColor and null != backgroundColor.value and '' != backgroundColor.value">
+                and  background_color=#{backgroundColor}
+            </if>
+            <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                and  item_id=#{itemId}
+            </if>
+            <if test="null != catId and null != catId.value and '' != catId.value">
+                and  cat_id=#{catId}
+            </if>
+            <if test="null != type and null != type.value and '' != type.value">
+                and  type=#{type}
+            </if>
+            <if test="null != sort and null != sort.value and '' != sort.value">
+                and  sort=#{sort}
+            </if>
+            <if test="null != isShow and null != isShow.value and '' != isShow.value">
+                and  is_show=#{isShow}
+            </if>
+            <if test="null != createTime and null != createTime.value and '' != createTime.value">
+                and  create_time=#{createTime}
+            </if>
+            <if test="null != updateTime and null != updateTime.value and '' != updateTime.value">
+                and  update_time=#{updateTime}
+            </if>
+        </where>
+        order by sort desc
+    </select>
+
+</mapper>

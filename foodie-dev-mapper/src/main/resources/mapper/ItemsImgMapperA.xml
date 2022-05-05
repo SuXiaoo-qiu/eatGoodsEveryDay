@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsImgMapper">
+
+
+    <select id="getItemsId" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_img 
+        <where>
+            and  item_id=#{itemId}
+      </where>
+    </select>
+
+
+    <select id="getByIdAndIsMain" resultType="string">
+        SELECT
+        url as url
+        FROM items_img
+       where  item_id = #{itemId} and is_main = #{isMain}
+    </select>
+</mapper>

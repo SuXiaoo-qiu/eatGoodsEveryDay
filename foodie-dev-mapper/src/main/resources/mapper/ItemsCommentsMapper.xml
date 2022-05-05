@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joeworld.mapper.ItemsCommentsMapper">
+    <resultMap id="BaseResultMap" type="com.joeworld.pojo.ItemsComments">
+        <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="item_id" property="itemId" />
+        <result column="item_name" property="itemName" />
+        <result column="item_spec_id" property="itemSpecId" />
+        <result column="sepc_name" property="sepcName" />
+        <result column="comment_level" property="commentLevel" />
+        <result column="content" property="content" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>  
+
+    <!-- 表字段 -->
+    <sql id="baseColumns">
+          id
+        , user_id
+        , item_id
+        , item_name
+        , item_spec_id
+        , sepc_name
+        , comment_level
+        , content
+        , created_time
+        , updated_time
+     </sql> 
+
+    <!-- 分页查询全部 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_comments 
+        <where>
+  
+               <if test="null != userId and null != userId.value and '' != userId.value">
+                    and  user_id=#{userId}
+               </if>
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                    and  item_id=#{itemId}
+               </if>
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                    and  item_name=#{itemName}
+               </if>
+               <if test="null != itemSpecId and null != itemSpecId.value and '' != itemSpecId.value">
+                    and  item_spec_id=#{itemSpecId}
+               </if>
+               <if test="null != sepcName and null != sepcName.value and '' != sepcName.value">
+                    and  sepc_name=#{sepcName}
+               </if>
+               <if test="null != commentLevel and null != commentLevel.value and '' != commentLevel.value">
+                    and  comment_level=#{commentLevel}
+               </if>
+               <if test="null != content and null != content.value and '' != content.value">
+                    and  content=#{content}
+               </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                    and  created_time=#{createdTime}
+               </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                    and  updated_time=#{updatedTime}
+               </if>
+               </where>
+        order by id desc
+        <if test="offset != null and limit != null">
+             limit #{offset}, #{limit}
+        </if>
+    </select>
+
+<!-- 查询全部 -->
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT         
+        <include refid="baseColumns" />
+        FROM items_comments 
+        <where>
+
+               <if test="null != userId and null != userId.value and '' != userId.value">
+                  and  user_id=#{userId}
+              </if>
+               <if test="null != itemId and null != itemId.value and '' != itemId.value">
+                  and  item_id=#{itemId}
+              </if>
+               <if test="null != itemName and null != itemName.value and '' != itemName.value">
+                  and  item_name=#{itemName}
+              </if>
+               <if test="null != itemSpecId and null != itemSpecId.value and '' != itemSpecId.value">
+                  and  item_spec_id=#{itemSpecId}
+              </if>
+               <if test="null != sepcName and null != sepcName.value and '' != sepcName.value">
+                  and  sepc_name=#{sepcName}
+              </if>
+               <if test="null != commentLevel and null != commentLevel.value and '' != commentLevel.value">
+                  and  comment_level=#{commentLevel}
+              </if>
+               <if test="null != content and null != content.value and '' != content.value">
+                  and  content=#{content}
+              </if>
+               <if test="null != createdTime and null != createdTime.value and '' != createdTime.value">
+                  and  created_time=#{createdTime}
+              </if>
+               <if test="null != updatedTime and null != updatedTime.value and '' != updatedTime.value">
+                  and  updated_time=#{updatedTime}
+              </if>
+               </where>
+        		order by id desc
+    </select>
+
+    <!-- 根据主键获取单条记录 -->
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
+        SELECT <include refid="baseColumns" /> FROM items_comments t WHERE id = #{id} 
+    </select>
+
+    <!-- 插入全部字段 -->
+    <insert id="insert" parameterType="com.joeworld.pojo.ItemsComments"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO items_comments
+        <trim prefix="(" suffix=")" suffixOverrides=",">	 
+                 id,
+                 user_id,
+                 item_id,
+                 item_name,
+                 item_spec_id,
+                 sepc_name,
+                 comment_level,
+                 content,
+                 created_time,
+                 updated_time,
+                </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+          #{id},                   
+           #{userId},                   
+           #{itemId},                   
+           #{itemName},                   
+           #{itemSpecId},                   
+           #{sepcName},                   
+           #{commentLevel},                   
+           #{content},                   
+           #{createdTime},                   
+           #{updatedTime},                   
+         </trim>
+    </insert>
+
+    <!-- 插入不为NULL的字段 -->
+    <insert id="insertIgnoreNull" parameterType="com.joeworld.pojo.ItemsComments"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+      INSERT INTO items_comments    
+      <trim prefix="(" suffix=")" suffixOverrides=",">	 
+            <if test="null != id and  ''!= id">
+                         id,
+                  </if>
+                  <if test="null != userId and  ''!= userId">
+                         user_id,
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                         item_id,
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                         item_name,
+                  </if>
+                  <if test="null != itemSpecId and  ''!= itemSpecId">
+                         item_spec_id,
+                  </if>
+                  <if test="null != sepcName and  ''!= sepcName">
+                         sepc_name,
+                  </if>
+                  <if test="null != commentLevel and  ''!= commentLevel">
+                         comment_level,
+                  </if>
+                  <if test="null != content and  ''!= content">
+                         content,
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                         created_time,
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                         updated_time,
+                  </if>
+                  </trim>
+      <trim prefix="VALUES (" suffix=")" suffixOverrides=",">            
+            <if test="null != id and  ''!= id">
+                  		#{id},                    
+                  </if>
+                  <if test="null != userId and  ''!= userId">
+                  		#{userId},                    
+                  </if>
+                  <if test="null != itemId and  ''!= itemId">
+                  		#{itemId},                    
+                  </if>
+                  <if test="null != itemName and  ''!= itemName">
+                  		#{itemName},                    
+                  </if>
+                  <if test="null != itemSpecId and  ''!= itemSpecId">
+                  		#{itemSpecId},                    
+                  </if>
+                  <if test="null != sepcName and  ''!= sepcName">
+                  		#{sepcName},                    
+                  </if>
+                  <if test="null != commentLevel and  ''!= commentLevel">
+                  		#{commentLevel},                    
+                  </if>
+                  <if test="null != content and  ''!= content">
+                  		#{content},                    
+                  </if>
+                  <if test="null != createdTime and  ''!= createdTime">
+                  		#{createdTime},                    
+                  </if>
+                  <if test="null != updatedTime and  ''!= updatedTime">
+                  		#{updatedTime},                    
+                  </if>
+                  </trim>
+    </insert>
+
+    <!-- 更新,更新全部字段 -->
+    <update id="update" parameterType="com.joeworld.pojo.ItemsComments">
+        UPDATE items_comments
+        <set>		
+        	user_id=#{userId},        
+        	item_id=#{itemId},        
+        	item_name=#{itemName},        
+        	item_spec_id=#{itemSpecId},        
+        	sepc_name=#{sepcName},        
+        	comment_level=#{commentLevel},        
+        	content=#{content},        
+        	created_time=#{createdTime},        
+        	updated_time=#{updatedTime},        
+        </set>	
+        WHERE id = #{id}
+    </update>  
+
+
+    <!-- 更新不为NULL的字段 -->
+    <update id="updateIgnoreNull" parameterType="com.joeworld.pojo.ItemsComments">
+        UPDATE items_comments
+        <set>
+                <if test="null != userId  and  ''!= userId">
+                       user_id=#{userId},                 
+                </if>
+                <if test="null != itemId  and  ''!= itemId">
+                       item_id=#{itemId},                 
+                </if>
+                <if test="null != itemName  and  ''!= itemName">
+                       item_name=#{itemName},                 
+                </if>
+                <if test="null != itemSpecId  and  ''!= itemSpecId">
+                       item_spec_id=#{itemSpecId},                 
+                </if>
+                <if test="null != sepcName  and  ''!= sepcName">
+                       sepc_name=#{sepcName},                 
+                </if>
+                <if test="null != commentLevel  and  ''!= commentLevel">
+                       comment_level=#{commentLevel},                 
+                </if>
+                <if test="null != content  and  ''!= content">
+                       content=#{content},                 
+                </if>
+                <if test="null != createdTime  and  ''!= createdTime">
+                       created_time=#{createdTime},                 
+                </if>
+                <if test="null != updatedTime  and  ''!= updatedTime">
+                       updated_time=#{updatedTime},                 
+                </if>
+                        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete" parameterType="com.joeworld.pojo.ItemsComments">
+    DELETE FROM  items_comments   WHERE id = #{id}
+
+    </delete>
+
+</mapper>
