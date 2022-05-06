@@ -172,4 +172,48 @@
             ic.created_time DESC
     </select>
 
+
+
+    <select id="getMyOrderCommentsCount"  parameterType="map" resultType="int">
+            SELECT
+                COUNT( 1 )
+            FROM
+                orders od
+                    LEFT JOIN order_status os ON od.id = os.order_id
+            WHERE
+                os.order_status IS NOT NULL
+              AND od.user_id = #{paramsMap.userId}
+              AND os.order_status = #{paramsMap.orderStatus}
+            <if test="paramsMap.isComment != null">
+              AND od.is_comment = #{paramsMap.isComment}
+            </if>
+
+    </select>
+
+
+    <select id="getOrderTrend"  parameterType="map" resultType="com.joeworld.pojo.OrderStatus">
+        SELECT
+            o.id AS orderId,
+            os.`order_status` AS orderStatus,
+            os.`created_time` AS createdTime,
+            os.`pay_time` AS payTime,
+            os.`deliver_time` AS deliverTime,
+            os.`success_time` AS successTime,
+            os.`close_time` AS closeTime,
+            os.`comment_time` AS commentTime
+        FROM
+            orders o
+                LEFT JOIN order_status os ON o.id = os.order_id
+        WHERE
+            o.user_id =#{paramsMap.userId}
+          AND o.is_delete = 0
+          AND os.order_status IN ( 20, 30, 40 )
+        ORDER BY
+            o.id DESC
+
+    </select>
+
+
+
+
 </mapper>

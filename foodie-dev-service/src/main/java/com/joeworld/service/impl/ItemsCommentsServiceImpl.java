@@ -3,16 +3,14 @@ package com.joeworld.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.joeworld.common.PageInfo;
 import com.joeworld.enums.CommentLevel;
+import com.joeworld.enums.OrderStatusEnum;
 import com.joeworld.enums.YesOrNo;
 import com.joeworld.mapper.ItemsCommentsMapper;
 import com.joeworld.pojo.ItemsComments;
 import com.joeworld.pojo.OrderStatus;
 import com.joeworld.pojo.Orders;
 import com.joeworld.pojo.bo.center.OrderItmesCommentBo;
-import com.joeworld.pojo.vo.CommentLeveCountsVo;
-import com.joeworld.pojo.vo.ItmeCommentVo;
-import com.joeworld.pojo.vo.SearchItemsVo;
-import com.joeworld.pojo.vo.ShopcartVo;
+import com.joeworld.pojo.vo.*;
 import com.joeworld.service.ItemsCommentsService;
 import com.joeworld.service.OrderStatusService;
 import com.joeworld.service.OrdersService;
@@ -215,6 +213,9 @@ public class ItemsCommentsServiceImpl implements ItemsCommentsService {
         //修改状态表 评价时间
         orderStatusService.updateIgnoreNull(orderStatus);
     }
+
+
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PageInfo<ClassInfo> selectComments(String userId,Integer page,Integer pageSize) {
         PageHelper.startPage(page,pageSize);
@@ -223,4 +224,40 @@ public class ItemsCommentsServiceImpl implements ItemsCommentsService {
         List<ClassInfo> lsit = itemsCommentsMapper.selectComments(map);
         return new PageInfo<>(lsit);
     }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public OrderStatusCommentVo getMyOrderCommentsCount(String userId) {
+        HashMap hashMap = new HashMap();
+        hashMap.put("userId", userId);
+        hashMap.put("orderStatus", OrderStatusEnum.WAIT_PAY.type);
+        int waitPayCounts = itemsCommentsMapper.getMyOrderCommentsCount(hashMap);
+
+        hashMap.put("orderStatus", OrderStatusEnum.WAIT_DELIVER.type);
+        int waitDeliverCounts = itemsCommentsMapper.getMyOrderCommentsCount(hashMap);
+
+        hashMap.put("orderStatus", OrderStatusEnum.WAIT_RECEIVE.type);
+        int waitReceiveCounts = itemsCommentsMapper.getMyOrderCommentsCount(hashMap);
+
+        hashMap.put("orderStatus", OrderStatusEnum.SUCCESS.type);
+        hashMap.put("isComment", YesOrNo.no.type);
+        int waitCommentCounts = itemsCommentsMapper.getMyOrderCommentsCount(hashMap);
+        OrderStatusCommentVo orderStatusCommentVo = new OrderStatusCommentVo(waitPayCounts, waitDeliverCounts, waitReceiveCounts, waitCommentCounts);
+
+        return orderStatusCommentVo;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PageInfo<ClassInfo> getOrderTrend(String userId,Integer page,Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userId",userId);
+        List<ClassInfo> lsit = itemsCommentsMapper.getOrderTrend(map);
+        return new PageInfo<>(lsit);
+    }
+
+
+
+
+
 }

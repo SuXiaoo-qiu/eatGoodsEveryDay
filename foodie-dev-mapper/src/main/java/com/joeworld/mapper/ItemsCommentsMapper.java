@@ -1,6 +1,7 @@
 package com.joeworld.mapper;
 
 import com.joeworld.pojo.ItemsComments;
+import com.joeworld.pojo.OrderStatus;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
 import com.joeworld.pojo.vo.ShopcartVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -117,6 +118,10 @@ public interface ItemsCommentsMapper {
 
 
 	public List<ClassInfo>  selectComments(@Param("paramsMap")Map map);
+
+	int getMyOrderCommentsCount(@Param("paramsMap")Map map);
+
+	List<ClassInfo>  getOrderTrend(@Param("paramsMap")Map map);
 
 
 }

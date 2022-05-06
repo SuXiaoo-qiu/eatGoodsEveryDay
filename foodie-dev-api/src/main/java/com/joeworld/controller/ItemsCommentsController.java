@@ -209,7 +209,6 @@ public class ItemsCommentsController {
     @ApiOperation(value = " 根据商品规格ids 查询最新的商品数据")
     @GetMapping("/selectItemBySpecIds")
     public R selectItemBySpecIds(@RequestParam String itemSpecIds) {
-
         return R.ok(itemsCommentsService.selectItemBySpecIds(itemSpecIds));
     }
 
@@ -224,7 +223,6 @@ public class ItemsCommentsController {
     public R saveComments(@RequestParam String userId,
                   @RequestParam String orderId,
                   @RequestBody List<OrderItmesCommentBo> commentList) {
-
         Orders orders = ordersService.selectMyOrderOne(userId, orderId);
         if (orders == null) {
             return R.error("订单存在");
@@ -253,6 +251,34 @@ public class ItemsCommentsController {
             pageSize = 10;
         }
         return R.ok(itemsCommentsService.selectComments(userId, page, pageSize));
+    }
+
+    /**
+     * 获取我的订单评论数
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "获取我的订单评论数")
+    @PostMapping("/getMyOrderCommentsCount")
+    public R getMyOrderCommentsCount(@RequestParam String userId) {
+        return R.ok(itemsCommentsService.getMyOrderCommentsCount(userId));
+    }
+
+    /**
+     * 订单去向
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "订单去向列表")
+    @PostMapping("/getOrderTrend")
+    public R getOrderTrend(@RequestParam String userId, @RequestParam  Integer page,@RequestParam Integer pageSize) {
+        if (null == page){
+            page = 0;
+        }
+        if (null == pageSize){
+            pageSize = 10;
+        }
+        return R.ok(itemsCommentsService.getOrderTrend(userId, page, pageSize));
     }
 
 

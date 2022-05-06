@@ -7,6 +7,7 @@ import com.joeworld.common.PageInfo;
 import com.joeworld.pojo.ItemsComments;
 import com.joeworld.pojo.bo.center.OrderItmesCommentBo;
 import com.joeworld.pojo.vo.CommentLeveCountsVo;
+import com.joeworld.pojo.vo.OrderStatusCommentVo;
 import com.joeworld.pojo.vo.ShopcartVo;
 import org.springframework.cglib.core.ClassInfo;
 
@@ -115,4 +116,7 @@ public interface ItemsCommentsService {
 
 	PageInfo<ClassInfo>  selectComments(String userId,Integer page,Integer pageSize);
 
+	OrderStatusCommentVo getMyOrderCommentsCount(String userId);
+
+	PageInfo<ClassInfo> getOrderTrend(String userId,Integer page,Integer pageSize);
 }
