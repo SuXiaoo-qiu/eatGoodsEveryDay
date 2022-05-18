@@ -123,7 +123,6 @@ public class RedisUtils {
 	 */
 	public String get(String key) {
 		logger.info("redis--------------"+key+"-执行了expire方法----------");
-
 		return (String)redisTemplate.opsForValue().get(key);
 	}
 
