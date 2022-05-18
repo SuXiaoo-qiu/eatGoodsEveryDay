@@ -66,9 +66,17 @@ public class IndexController {
     @ApiOperation(value = "查询一级分类")
     @GetMapping("/selectOneCarousel")
     public R selectOneCarousel( ) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("type", YesOrNo.man.type);
-        List<Category> categories = categoryService.listAll(params);
+        List<Category> categories = new ArrayList<>();
+        String categoriesStr = redisUtils.get("categories");
+        if (StringUtils.isEmpty(categoriesStr)) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("type", YesOrNo.man.type);
+            categories = categoryService.listAll(params);
+            redisUtils.set("categories",JsonUtils.objectToJson(categories));
+        }else {
+            categories= JsonUtils.jsonToList(categoriesStr, Category.class);
+        }
+
         return  R.ok(categories);
     }
 
@@ -83,7 +91,14 @@ public class IndexController {
         if (fatherId == null) {
             return R.error("请求参数为空");
         }
-        List<Category> categories = categoryService.selectTwoCarousel(fatherId);
+        List<Category> categories = new ArrayList<>();
+        String categoriesTwo = redisUtils.get("categoriesTwo"+fatherId);
+        if (StringUtils.isEmpty(categoriesTwo)) {
+            categories = categoryService.selectTwoCarousel(fatherId);
+            redisUtils.set("categoriesTwo"+fatherId, JsonUtils.objectToJson(categories));
+        }else {
+            categories = JsonUtils.jsonToList(categoriesTwo,Category.class);
+        }
         return  R.ok(categories);
     }
 
