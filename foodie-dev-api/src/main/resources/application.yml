@@ -19,6 +19,11 @@ spring:
       pool-name: DateSourceHikariCP # 连接池名字
       max-lifetime: 1800000 # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟
       connection-test-query: SELECT 1
+  redis:
+    database: 1  # 使用的数据库（redis 默认有16个库 0-15） 我们这里使用的1
+    host:  43.128.169.198   # 你redis的地址 如果是再本地那就是localhost
+    port:  6379  # redis的端口号  默认6379 如果你改过就是是改动的端口
+    password:  root   # 如果redis 设置过密码就写密码 没有密码就不要写password
   servlet:
     multipart:
       max-file-size: 512000  # 文件上传大小限制为 500k

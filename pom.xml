@@ -128,6 +128,13 @@
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>2.8.3</version>
         </dependency>
+
+        <!--redis 依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
     </dependencies>
 
 
