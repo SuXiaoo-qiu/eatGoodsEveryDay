@@ -7,6 +7,7 @@ import com.joeworld.common.RedisUtils;
 import com.joeworld.enums.YesOrNo;
 import com.joeworld.pojo.Carousel;
 import com.joeworld.pojo.Category;
+import com.joeworld.pojo.vo.CateGoryVo;
 import com.joeworld.pojo.vo.NewCateVo;
 import com.joeworld.service.CarouselService;
 import com.joeworld.service.CategoryService;
@@ -91,13 +92,13 @@ public class IndexController {
         if (fatherId == null) {
             return R.error("请求参数为空");
         }
-        List<Category> categories = new ArrayList<>();
+        List<CateGoryVo> categories = new ArrayList<>();
         String categoriesTwo = redisUtils.get("categoriesTwo"+fatherId);
         if (StringUtils.isEmpty(categoriesTwo)) {
             categories = categoryService.selectTwoCarousel(fatherId);
             redisUtils.set("categoriesTwo"+fatherId, JsonUtils.objectToJson(categories));
         }else {
-            categories = JsonUtils.jsonToList(categoriesTwo,Category.class);
+            categories = JsonUtils.jsonToList(categoriesTwo,CateGoryVo.class);
         }
         return  R.ok(categories);
     }

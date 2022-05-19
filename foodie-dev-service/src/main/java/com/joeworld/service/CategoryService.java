@@ -3,6 +3,7 @@ package com.joeworld.service;
 
 import com.joeworld.common.PageInfo;
 import com.joeworld.pojo.Category;
+import com.joeworld.pojo.vo.CateGoryVo;
 import com.joeworld.pojo.vo.NewCateVo;
 import org.springframework.cglib.core.ClassInfo;
 
@@ -79,7 +80,7 @@ public interface CategoryService {
 	 * @param fatherId
 	 * @return
 	 */
-	List<Category> selectTwoCarousel(Integer fatherId);
+	List<CateGoryVo> selectTwoCarousel(Integer fatherId);
 
 
 	/**

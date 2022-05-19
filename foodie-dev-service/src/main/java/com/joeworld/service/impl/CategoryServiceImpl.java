@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.joeworld.common.PageInfo;
 import com.joeworld.mapper.CategoryMapper;
 import com.joeworld.pojo.Category;
+import com.joeworld.pojo.vo.CateGoryVo;
 import com.joeworld.pojo.vo.NewCateVo;
 import com.joeworld.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +114,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> selectTwoCarousel(Integer fatherId) {
+    public List<CateGoryVo> selectTwoCarousel(Integer fatherId) {
         return categoryMapper.selectTwoCarousel(fatherId);
     }
 

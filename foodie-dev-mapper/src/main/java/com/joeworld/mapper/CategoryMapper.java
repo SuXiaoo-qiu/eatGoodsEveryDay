@@ -1,6 +1,7 @@
 package com.joeworld.mapper;
 
 import com.joeworld.pojo.Category;
+import com.joeworld.pojo.vo.CateGoryVo;
 import com.joeworld.pojo.vo.NewCateVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -75,7 +76,7 @@ public interface CategoryMapper {
      */
 	int delete(Category category);
 
-	List<Category> selectTwoCarousel(Integer fatherId);
+	List<CateGoryVo> selectTwoCarousel(Integer fatherId);
 
 
 	/**
