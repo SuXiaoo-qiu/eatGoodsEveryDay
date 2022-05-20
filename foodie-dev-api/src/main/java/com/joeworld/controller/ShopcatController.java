@@ -87,8 +87,20 @@ public class ShopcatController  extends BaseConller {
         if (StringUtils.isBlank(userId)||StringUtils.isBlank(itemSpecId)) {
             return R.error("请求参数不能未空");
         }
-        // TODO: 2022/4/25  前端在登录的情况下 删除购物车中的商品 （redis）
-        System.out.println("前端在登录的情况下 删除购物车中的商品 （redis）执行了"+userId+"itemSpecId"+itemSpecId);
+        // 2022/4/25  前端在登录的情况下 删除购物车中的商品 （redis）
+
+        String shopcartStr = redisUtils.get(FOODIE_SHOPCART + userId);
+        if (StringUtils.isNotBlank(shopcartStr)) {
+            List<ShopcartBo> shopcartBoList = JsonUtils.jsonToList(shopcartStr, ShopcartBo.class);
+            for (ShopcartBo shopcartBo : shopcartBoList) {
+
+                if (shopcartBo.getSpecId().equals(itemSpecId)) {
+                    shopcartBoList.remove(shopcartBo);
+                    break;
+                }
+            }
+            redisUtils.set(FOODIE_SHOPCART + userId, JsonUtils.objectToJson(shopcartBoList));
+        }
         return R.ok();
     }
 }

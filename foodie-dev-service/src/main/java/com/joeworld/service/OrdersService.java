@@ -4,6 +4,7 @@ package com.joeworld.service;
 import com.joeworld.common.PageInfo;
 import com.joeworld.pojo.Orders;
 import com.joeworld.pojo.Users;
+import com.joeworld.pojo.bo.ShopcartBo;
 import com.joeworld.pojo.bo.SubmitOrderBo;
 import com.joeworld.pojo.vo.MyOrdersVo;
 import com.joeworld.pojo.vo.OrderVo;
@@ -81,7 +82,7 @@ public interface OrdersService {
 	 * 创建订单
 	 * @param submitOrderBo
 	 */
-	OrderVo orderCreate(SubmitOrderBo submitOrderBo);
+	OrderVo orderCreate(SubmitOrderBo submitOrderBo,List<ShopcartBo> shopcartBoList);
 
 	/**
 	 * 查询我的订单列表（分页）

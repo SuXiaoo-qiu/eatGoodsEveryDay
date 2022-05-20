@@ -1,10 +1,8 @@
 package com.joeworld.controller;
 
-import com.joeworld.common.BaseConller;
-import com.joeworld.common.CookieUtils;
-import com.joeworld.common.PageInfo;
-import com.joeworld.common.R;
+import com.joeworld.common.*;
 import com.joeworld.pojo.Orders;
+import com.joeworld.pojo.bo.ShopcartBo;
 import com.joeworld.pojo.bo.SubmitOrderBo;
 import com.joeworld.pojo.vo.MerchantOrdersVo;
 import com.joeworld.pojo.vo.OrderVo;
@@ -25,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +40,8 @@ public class OrdersController  extends BaseConller {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 分页查询
@@ -136,6 +137,7 @@ public class OrdersController  extends BaseConller {
           return R.error("删除失败");
       }
 
+
     /**
      * 用户下单
      * @param submitOrderBo
@@ -150,7 +152,13 @@ public class OrdersController  extends BaseConller {
         if (StringUtils.isBlank(submitOrderBo.getPayMethod().toString())){
             return R.error("支付方式错误");
         }
-        OrderVo orderVo = ordersService.orderCreate(submitOrderBo);
+
+        String shopcartStr = redisUtils.get(FOODIE_SHOPCART + submitOrderBo.getUserId());
+        if (StringUtils.isBlank(shopcartStr)) {
+            return R.error("购物车暂无数据请刷新后重试");
+        }
+        List<ShopcartBo> shopcartBoList = JsonUtils.jsonToList(shopcartStr, ShopcartBo.class);
+        OrderVo orderVo = ordersService.orderCreate(submitOrderBo,shopcartBoList);
         MerchantOrdersVo merchantOrdersVo = orderVo.getMerchantOrdersVo();
         merchantOrdersVo.setReturnUrl(payReturnURL);
         merchantOrdersVo.setAmount(1);

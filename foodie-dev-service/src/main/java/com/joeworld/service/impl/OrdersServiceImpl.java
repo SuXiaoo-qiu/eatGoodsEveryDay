@@ -9,6 +9,7 @@ import com.joeworld.mapper.OrderItemsMapper;
 import com.joeworld.mapper.OrderStatusMapper;
 import com.joeworld.mapper.OrdersMapper;
 import com.joeworld.pojo.*;
+import com.joeworld.pojo.bo.ShopcartBo;
 import com.joeworld.pojo.bo.SubmitOrderBo;
 import com.joeworld.pojo.vo.MerchantOrdersVo;
 import com.joeworld.pojo.vo.MyOrdersVo;
@@ -134,10 +135,19 @@ public class OrdersServiceImpl implements OrdersService {
     public int delete(Orders orders) {
     	return ordersMapper.delete(orders);
     }
+    private  ShopcartBo getBycontsFromShopcart(List<ShopcartBo> shopcartBoList,String specId){
+       for (ShopcartBo shopcartBo : shopcartBoList) {
+           if (shopcartBo.getSpecId().equals(specId)){
+               return shopcartBo;
+           }
+       }
+       return null;
+
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public OrderVo orderCreate(SubmitOrderBo submitOrderBo) {
+    public OrderVo orderCreate(SubmitOrderBo submitOrderBo,List<ShopcartBo> shopcartBoList) {
 
         UserAddress userAddress = new UserAddress();
         userAddress.setId(submitOrderBo.getAddressId());
@@ -167,8 +177,10 @@ public class OrdersServiceImpl implements OrdersService {
         String itemSpecIdArr[] = submitOrderBo.getItemSpecIds().split(",");
         Integer totalAmount = 0;   //商品原价
         Integer realPayAmount= 0;  //优惠后实际支付价格的累计
-        Integer byCounts = 1;
+
         for (String itemSpecid: itemSpecIdArr) {
+            ShopcartBo bycontsFromShopcart = this.getBycontsFromShopcart(shopcartBoList, itemSpecid);
+            Integer byCounts = bycontsFromShopcart.getBuyCounts();
             //商品规格
             ItemsSpec itemsSpec = itemsSpecService.getById(itemSpecid);
             // TODO: 2022/4/27 整合redis 后商品购买数量从redis中获取 这里暂时写死

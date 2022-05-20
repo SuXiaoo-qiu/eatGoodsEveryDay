@@ -97,7 +97,7 @@ public class RedisUtils {
 	 * @param value
 	 */
 	public void set(String key, String value) {
-		logger.info("redis--------------key:"+key+"--value:"+value+"执行了expire方法----------");
+		logger.info("redis--------------key:"+key+"--value:"+value+"执行了set方法----------");
 		redisTemplate.opsForValue().set(key, value);
 	}
 
