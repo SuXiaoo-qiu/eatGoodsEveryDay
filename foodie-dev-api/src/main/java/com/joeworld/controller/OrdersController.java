@@ -163,9 +163,12 @@ public class OrdersController  extends BaseConller {
         merchantOrdersVo.setReturnUrl(payReturnURL);
         merchantOrdersVo.setAmount(1);
 
+        // 清理覆盖现有的redis 汇总的购物车数据
+        shopcartBoList.removeAll(orderVo.getToBeRemovedShopcatdList());
+        redisUtils.set(FOODIE_SHOPCART + submitOrderBo.getUserId(),JsonUtils.objectToJson(shopcartBoList));
 
-        // TODO: 2022/4/28  整合redis之后。完善购物车中已经结算的商品进行清除，并且同步到前端的cookie中
-//        CookieUtils.setCookie(request, response, FOODIE_SHOPCART,"",true);
+        // : 2022/4/28  整合redis之后。完善购物车中已经结算的商品进行清除，并且同步到前端的cookie中
+        CookieUtils.setCookie(request, response, FOODIE_SHOPCART,JsonUtils.objectToJson(shopcartBoList),true);
         HttpHeaders httpHeaders = new HttpHeaders();
         //传输数据类型
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
