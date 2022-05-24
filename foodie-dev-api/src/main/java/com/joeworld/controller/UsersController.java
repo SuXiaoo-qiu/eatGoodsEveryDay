@@ -302,8 +302,10 @@ public class UsersController  extends BaseConller{
         CookieUtils.deleteCookie(request,response, "user");
 
         // TODO: 2022/4/5  用户推出登录，清空购物车 
-        // TODO: 2022/4/5  分布式会话中需要清除用户数据
-       return R.ok();
+        // 2022/4/5  分布式会话中需要清除用户数据
+        CookieUtils.deleteCookie(request,response, FOODIE_SHOPCART);
+
+        return R.ok();
     }
 
 

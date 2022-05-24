@@ -73,7 +73,9 @@ public class IndexController {
             HashMap<String, Object> params = new HashMap<>();
             params.put("type", YesOrNo.man.type);
             categories = categoryService.listAll(params);
-            redisUtils.set("categories",JsonUtils.objectToJson(categories));
+            if (categories != null&&categories.size() > 0) {
+                redisUtils.set("categories",JsonUtils.objectToJson(categories));
+            }
         }else {
             categories= JsonUtils.jsonToList(categoriesStr, Category.class);
         }
@@ -96,7 +98,11 @@ public class IndexController {
         String categoriesTwo = redisUtils.get("categoriesTwo"+fatherId);
         if (StringUtils.isEmpty(categoriesTwo)) {
             categories = categoryService.selectTwoCarousel(fatherId);
-            redisUtils.set("categoriesTwo"+fatherId, JsonUtils.objectToJson(categories));
+            if (categories != null&&categories.size() > 0) {
+                redisUtils.set("categoriesTwo"+fatherId, JsonUtils.objectToJson(categories));
+            }else {
+                redisUtils.set("categoriesTwo"+fatherId, JsonUtils.objectToJson(categories),5*60);
+            }
         }else {
             categories = JsonUtils.jsonToList(categoriesTwo,CateGoryVo.class);
         }
